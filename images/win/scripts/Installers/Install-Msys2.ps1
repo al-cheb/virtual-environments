@@ -9,35 +9,22 @@
 
 $dash = "-" * 40
 
-$origPath = $env:PATH
-$gitPath  = "$env:ProgramFiles\Git"
-
-$msys2_release = "https://api.github.com/repos/msys2/msys2-installer/releases/latest"
-
-$msys2Uri = ((Invoke-RestMethod $msys2_release).assets | Where-Object {
+# Downloading msys2
+$msys2Release = "https://api.github.com/repos/msys2/msys2-installer/releases/latest"
+$msys2Uri = ((Invoke-RestMethod $msys2Release).assets | Where-Object {
   $_.name -match "x86_64" -and $_.name.EndsWith("tar.xz") }).browser_download_url
-
-# Download the latest msys2 x86_64, filename includes release date
-Write-Host "Starting msys2 download using $($msys2Uri.split('/')[-1])"
 $msys2File = Start-DownloadWithRetry -Url $msys2Uri
-Write-Host "Finished download"
-
-# nix style path for tar
-$msys2FileU = "/$msys2File".replace(':', '').replace('\', '/')
-
-# Git tar needs exe's from mingw64\bin
-$env:PATH = "$gitPath\usr\bin;$gitPath\mingw64\bin;$origPath"
-
-$tar = "$gitPath\usr\bin\tar.exe"
 
 # extract tar.xz to C:\
 Write-Host "Starting msys2 extraction"
-&$tar -xJf $msys2FileU -C /c/
-Remove-Item $msys2File
+$tempPath = Join-Path $env:Temp msys
+Extract-7Zip -Path $msys2File -DestinationPath $tempPath
+$tarPath = Resolve-Path $tempPath\msys*.tar
+Extract-7Zip -Path $tarPath -DestinationPath C:\
 Write-Host "Finished extraction"
 
 # Add msys2 bin tools folders to PATH temporary
-$env:PATH = "C:\msys64\mingw64\bin;C:\msys64\usr\bin;$origPath"
+$env:PATH = "C:\msys64\mingw64\bin;C:\msys64\usr\bin;$env:PATH"
 
 Write-Host "`n$dash bash pacman-key --init"
 bash.exe -c "pacman-key --init 2>&1"
@@ -87,5 +74,8 @@ Write-Host "`n$dash Installed msys2 packages"
 pacman.exe -Q | grep -v ^mingw-w64-
 
 Write-Host "`nMSYS2 installation completed"
+
+Add-MachinePathItem "C:\msys64\mingw64\bin"
+Add-MachinePathItem "C:\msys64\usr\bin"
 
 Invoke-PesterTests -TestFile "MSYS2"
