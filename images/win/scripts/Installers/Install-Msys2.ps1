@@ -77,8 +77,10 @@ Write-Host "`nMSYS2 installation completed"
 
 # Environment
 # 1. create folder C:\msys64\shell
-# 2. create symlinks for bash.exe and sh.exe
+# 2. create hardlinks for bash.exe and sh.exe
 # 3. add C:\msys64\shell, C:\msys64\mingw64\bin and C:\msys64\usr\bin to the Path
+# 4. C:\msys64\shell add before C:\Windows\System32 in the Path to replace the bash.exe from WSL
+# 5. C:\msys64\shell, C:\msys64\mingw64\bin add after C:\Windows\System32 to not replace built-in tar.exe
 $null = New-Item -Path C:\msys64 -Name shell -ItemType Directory
 $null = New-Item -ItemType HardLink -Path "C:\msys64\shell\bash.exe" -Target "C:\msys64\usr\bin\bash.exe"
 $null = New-Item -ItemType HardLink -Path "C:\msys64\shell\sh.exe" -Target "C:\msys64\usr\bin\sh.exe"
