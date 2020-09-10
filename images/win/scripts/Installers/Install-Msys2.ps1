@@ -75,7 +75,18 @@ pacman.exe -Q | grep -v ^mingw-w64-
 
 Write-Host "`nMSYS2 installation completed"
 
-Add-MachinePathItem "C:\msys64\mingw64\bin"
-Add-MachinePathItem "C:\msys64\usr\bin"
+# Environment
+# 1. create folder C:\msys64\shell
+# 2. create symlinks for bash.exe and sh.exe
+# 3. add C:\msys64\shell, C:\msys64\mingw64\bin and C:\msys64\usr\bin to the Path
+$null = New-Item -Path C:\msys64 -Name shell -ItemType Directory
+$null = New-Item -ItemType HardLink -Path "C:\msys64\shell\bash.exe" -Target "C:\msys64\usr\bin\bash.exe"
+$null = New-Item -ItemType HardLink -Path "C:\msys64\shell\sh.exe" -Target "C:\msys64\usr\bin\sh.exe"
+
+Add-MachinePathItem "C:\msys64\shell"
+$regEnvKey = 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\'
+$pathValue = Get-ItemPropertyValue -Path $regEnvKey -Name 'Path'
+$pathValue += ";C:\msys64\mingw64\bin;C:\msys64\usr\bin"
+Set-ItemProperty -Path $regEnvKey -Name 'Path' -Value $pathValue
 
 Invoke-PesterTests -TestFile "MSYS2"
