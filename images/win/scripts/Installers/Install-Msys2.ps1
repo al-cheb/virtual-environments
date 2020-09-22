@@ -91,7 +91,7 @@ $pathValue = Get-ItemPropertyValue -Path $regEnvKey -Name 'Path'
 $pathValue += ";C:\msys64\mingw64\bin;C:\msys64\usr\bin"
 Set-ItemProperty -Path $regEnvKey -Name 'Path' -Value $pathValue
 
-# Remove python
+# Rename python
 Rename-Item "C:\msys64\usr\bin\python.exe" -NewName "_python.exe"
 
 Invoke-PesterTests -TestFile "MSYS2"
