@@ -228,8 +228,7 @@
             "Microsoft.VisualStudio.Component.Workflow",
             "Microsoft.VisualStudio.Workload.Office"
         ],
-        "buildtools_workloads": [
-            "Microsoft.VisualStudio.Workload.WebBuildTools"
+        "vsix": [
         ]
     }
 }
