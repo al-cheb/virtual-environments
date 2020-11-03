@@ -10,6 +10,7 @@ source $HELPER_SCRIPTS/os.sh
 # Install Powershell
 if isUbuntu20 ; then
     dotnet tool install --tool-path /opt/microsoft/powershell/7 powershell
+    rm -f /opt/microsoft/powershell/7/.store/powershell/7.0.3/powershell/7.0.3/tools//netcoreapp3.1/any/unix/pwsh
     ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 fi
 
