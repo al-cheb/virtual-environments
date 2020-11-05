@@ -2,20 +2,14 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get -yq update
 apt-get -yq dist-upgrade
 
-echo "#ip"
-ip a
+# Stop and disable apt-daily upgrade services;
+systemctl stop apt-daily.timer
+systemctl disable apt-daily.timer
+systemctl disable apt-daily.service
+systemctl stop apt-daily-upgrade.timer
+systemctl disable apt-daily-upgrade.timer
+systemctl disable apt-daily-upgrade.service
 
-echo "#dns"
-systemd-resolve --status
-
-echo "#1"
-dig +short myip.opendns.com @resolver1.opendns.com
-
-echo "#2"
-dig azure.archive.ubuntu.com
-
-echo "#3"
-dig @8.8.8.8 azure.archive.ubuntu.com
 
 
 # This step should completely disable any automatic updates except manual
@@ -34,11 +28,3 @@ apt-get install jq
 add-apt-repository -y ppa:apt-fast/stable
 apt-get update
 apt-get install apt-fast
-
-# Stop and disable apt-daily upgrade services;
-systemctl stop apt-daily.timer
-systemctl disable apt-daily.timer
-systemctl disable apt-daily.service
-systemctl stop apt-daily-upgrade.timer
-systemctl disable apt-daily-upgrade.timer
-systemctl disable apt-daily-upgrade.service
