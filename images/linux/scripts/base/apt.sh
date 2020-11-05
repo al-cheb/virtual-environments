@@ -2,6 +2,12 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get -yq update
 apt-get -yq dist-upgrade
 
+echo "#ip"
+ip a
+
+echo "#dns"
+systemd-resolve --status
+
 echo "#1"
 dig +short myip.opendns.com @resolver1.opendns.com
 
