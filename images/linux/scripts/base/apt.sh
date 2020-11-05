@@ -1,5 +1,3 @@
-#!/bin/bash -e
-
 export DEBIAN_FRONTEND=noninteractive
 apt-get -yq update
 apt-get -yq dist-upgrade
