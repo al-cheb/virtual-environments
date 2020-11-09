@@ -13,19 +13,15 @@ apt-get install -y apt-transport-https ca-certificates curl software-properties-
 
 # Install Microsoft GPG public key
 curl -L https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 
-# update
-apt-get -yq update
-apt-get -yq dist-upgrade
-
-# Install aria2 and jq
-apt-get install aria2
-apt-get install jq
-
 # Use apt-fast for parallel downloads
 add-apt-repository -y ppa:apt-fast/stable
+
+# update system
 apt-get update
-apt-get install apt-fast
+apt-get dist-upgrade
+
+# Install aria2 and jq, apt-fast
+apt-get install aria2 jq apt-fast
