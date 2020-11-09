@@ -15,12 +15,5 @@ sudo sed -i 's/APT::Periodic::Update-Package-Lists "1"/APT::Periodic::Update-Pac
 echo "APT::Acquire::Retries \"10\";" > /etc/apt/apt.conf.d/80-retries
 
 # Configure apt to always assume Y
-echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90-assumeyes
 
-# Install aria2 and jq
-apt-get install aria2
-apt-get install jq
-# Use apt-fast for parallel downloads
-add-apt-repository -y ppa:apt-fast/stable
-apt-get update
-apt-get install apt-fast

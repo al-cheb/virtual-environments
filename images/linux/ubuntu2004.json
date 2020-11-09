@@ -66,6 +66,14 @@
         },
         {
             "type": "shell",
+            "script": "{{template_dir}}/scripts/base/apt.sh",
+            "environment_vars": [
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        },
+        {
+            "type": "shell",
             "expect_disconnect": true,
             "scripts": [
                 "{{template_dir}}/scripts/base/reboot.sh"
@@ -77,14 +85,6 @@
             "scripts": [
                 "{{template_dir}}/scripts/base/repos.sh"
             ],
-            "environment_vars": [
-                "DEBIAN_FRONTEND=noninteractive"
-            ],
-            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-        },
-        {
-            "type": "shell",
-            "script": "{{template_dir}}/scripts/base/apt.sh",
             "environment_vars": [
                 "DEBIAN_FRONTEND=noninteractive"
             ],
