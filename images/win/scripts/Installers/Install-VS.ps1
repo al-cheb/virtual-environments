@@ -47,4 +47,5 @@ if (Test-IsWin19) {
 	Install-Binary -Url $sdkUrl -Name $sdkFileName -ArgumentList $argumentList
 }
 
-Invoke-PesterTests -TestFile "VisualStudio"
+Get-ChildItem "C:\Program Files\dotnet\sdk" | ForEach-Object { Write-Host $_.FullName }
+Write-Host $(dotnet --list-sdks)
