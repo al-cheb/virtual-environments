@@ -139,7 +139,6 @@
             "dnsutils",
             "dpkg",
             "fakeroot",
-            "gnome-keyring",
             "gnupg2",
             "imagemagick",
             "iproute2",
