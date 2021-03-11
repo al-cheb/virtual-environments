@@ -41,6 +41,16 @@ setx AGENT_TOOLSDIRECTORY $env:AGENT_TOOLSDIRECTORY /m
 # Set TLS1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor "Tls12"
 
+Invoke-WebRequest 'https://github.com/facebook/zstd/releases/download/v1.4.9/zstd-v1.4.9-win64.zip' -OutFile "C:\zstd-win64.zip"
+$zstdArchivePath = "C:\zstd-win64.zip"
+
+$toolPath = "C:\tools"
+$zstdPath = Join-Path $toolPath zstd
+Expand-Archive -Path $zstdArchivePath -DestinationPath $toolPath
+Move-Item -Path "${zstdPath}*" -Destination $zstdPath
+
+exit 1
+
 Write-Host "Disable Antivirus"
 Set-MpPreference -DisableRealtimeMonitoring $true
 
