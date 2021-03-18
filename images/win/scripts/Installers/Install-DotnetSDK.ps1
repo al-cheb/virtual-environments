@@ -12,18 +12,10 @@ Set-SystemVariable -SystemVariable DOTNET_MULTILEVEL_LOOKUP -Value "0"
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor "Tls12"
 
-$templates = @(
-    'console',
-    'mstest',
-    'web',
-    'mvc',
-    'webapi'
-)
-
-function InstallSDKVersion (
-    $sdkVersion
-)
+function InstallSDKVersion 
 {
+    param($sdkVersion)
+
     if (!(Test-Path -Path "C:\Program Files\dotnet\sdk\$sdkVersion"))
     {
         Write-Host "Installing dotnet $sdkVersion"
@@ -39,21 +31,9 @@ function InstallSDKVersion (
     $sdkTargetsUrl = "https://raw.githubusercontent.com/dotnet/sdk/82bc30c99f1325dfaa7ad450be96857a4fca2845/src/Tasks/Microsoft.NET.Build.Tasks/targets/${sdkTargetsName}"
     $sdkTargetsPath = "C:\Program Files\dotnet\sdk\$sdkVersion\Sdks\Microsoft.NET.Sdk\targets"
     Start-DownloadWithRetry -Url $sdkTargetsUrl -DownloadPath $sdkTargetsPath -Name $sdkTargetsName
-
-    # warm up dotnet for first time experience
-    $templates | ForEach-Object {
-        $template = $_
-        $projectPath = Join-Path -Path C:\temp -ChildPath $template
-        New-Item -Path $projectPath -Force -ItemType Directory
-        Push-Location -Path $projectPath
-        & $env:ProgramFiles\dotnet\dotnet.exe new globaljson --sdk-version "$sdkVersion"
-        & $env:ProgramFiles\dotnet\dotnet.exe new $template
-        Pop-Location
-        Remove-Item $projectPath -Force -Recurse
-    }
 }
 
-function InstallAllValidSdks()
+function InstallAllValidSdks
 {
     # Consider all channels except preview/eol channels.
     # Sort the channels in ascending order
@@ -99,7 +79,7 @@ function InstallAllValidSdks()
     }
 }
 
-function RunPostInstallationSteps()
+function RunPostInstallationSteps
 {
     Add-MachinePathItem "C:\Program Files\dotnet"
     # Run script at startup for all users
